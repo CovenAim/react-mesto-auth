@@ -6,7 +6,7 @@
     font-style: normal;
     font-weight: 500;
     line-height: 22px;
-    /* display: flex; */
-    height: 0;
-    margin: 26px 0px 46px 0;
+
+    height: 22px;
+    margin: 0;
 }

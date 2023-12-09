@@ -1,10 +1,4 @@
-.register__button-signup {
-    width: 358px;
-    height: 50px;
-    border-radius: 2px;
-    background: #FFF;
-    margin: 216px 461px 15px;
-
+.auth-form__button-text {
     color: #000;
     text-align: center;
     font-family: 'Inter', Arial, sans-serif;

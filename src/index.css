@@ -13,26 +13,18 @@
 @import url(../src/blocks/header/__signup/header__signup.css);
 @import url(../src/blocks/header/__login/header__login.css);
 @import url(../src/blocks/header/__unlogin/header__unlogin.css);
+@import url(../src/blocks/header/__bar/header__bar.css);
 
-/* register */
-@import url(../src/blocks/register/__title/register__title.css);
-@import url(../src/blocks/register/__label/register__label.css);
-@import url(../src/blocks/register/__input-email/register__input-email.css);
-@import url(../src/blocks/register/__input-password/register__input-password.css);
-@import url(../src/blocks/register/__line/register__line.css);
-@import url(../src/blocks/register/__button-signup/register__button-signup.css);
-@import url(../src/blocks/register/__button-text/register__button-text.css);
-@import url(../src/blocks/register/__text/register__text.css);
-@import url(../src/blocks/register/__login/register__login.css);
-
-/* login */
-@import url(../src/blocks/login/__title/login__title.css);
-@import url(../src/blocks/login/__label/login__label.css);
-@import url(../src/blocks/login/__input-email/login__input-email.css);
-@import url(../src/blocks/login/__input-password/login__input-password.css);
-@import url(../src/blocks/login/__line/login__line.css);
-@import url(../src/blocks/login/__button-signin/login__button-signin.css);
-@import url(../src/blocks/login/__button-text/login__button-text.css);
+/* auth-form */
+@import url(../src/blocks/auth-form/__button/auth-form__button.css);
+@import url(../src/blocks/auth-form/__button-text/auth-form__button-text.css);
+@import url(../src/blocks/auth-form/__input-email/auth-form__input-email.css);
+@import url(../src/blocks/auth-form/__input-password/auth-form__input-password.css);
+@import url(../src/blocks/auth-form/__label/auth-form__label.css);
+@import url(../src/blocks/auth-form/__line/auth-form__line.css);
+@import url(../src/blocks/auth-form/__login/auth-form__login.css);
+@import url(../src/blocks/auth-form/__text/auth-form__text.css);
+@import url(../src/blocks/auth-form/__title/auth-form__title.css);
 
 /* profile */
 @import url(../src/blocks/profile/profile.css);

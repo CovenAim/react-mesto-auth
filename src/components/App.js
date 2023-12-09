@@ -34,6 +34,18 @@ export default function App() {
   const [notification, setNotification] = useState("");
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const storedLoggedIn = localStorage.getItem("loggedIn");
+    const storedUserEmail = localStorage.getItem("userEmail");
+
+    if (token && storedLoggedIn === "true" && storedUserEmail) {
+      setLoggedIn(true);
+      setUserEmail(storedUserEmail);
+      navigate("/"); // Перенаправление пользователя на главную страницу после успешной авторизации
+    }
+  }, [navigate]);
+
   const handleEditProfileClick = () => {
     setIsEditProfilePopupOpen(true);
   };
@@ -61,44 +73,67 @@ export default function App() {
         setToken(data.token);
         setLoggedIn(true);
         setUserEmail(email);
-        localStorage.setItem("loggedIn", true);
+        
+        // Сохраняем информацию в локальное хранилище
+        localStorage.setItem("loggedIn", "true");
+        localStorage.setItem("userEmail", email);
+        localStorage.setItem("token", data.token);
+        
         navigate("/");
       }
     } catch (err) {
-      console.error(err); // Выводите полный объект ошибки в консоль
+      console.error(err);
       openInfotooltip({
         type: "error",
         text: "Что-то пошло не так! Попробуйте ещё раз.",
       });
     }
   };
+  
+  
 
   const handleRegister = (email, password) => {
-    return apiAuthorize
-      .register(email, password)
-      .then((data) => {
-        if (data) {
-          openInfotooltip({
-            type: "success",
-            text: "Вы успешно зарегистрировались!",
-          });
-          navigate("/sign-in", { replace: true });
-        }
+    handleSubmit(() => apiAuthorize.register(email, password))
+      .then(() => {
+        openInfotooltip({
+          type: "success",
+          text: "Вы успешно зарегистрировались!",
+        });
+        navigate("/sign-in", { replace: true });
       })
-      .catch((err) => {
+      .catch((error) => {
         openInfotooltip({
           type: "error",
           text: "Что-то пошло не так! Попробуйте ещё раз.",
         });
-        console.log(err);
+        console.error("Ошибка регистрации:", error);
       });
   };
+  
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const storedLoggedIn = localStorage.getItem("loggedIn");
+    const storedUserEmail = localStorage.getItem("userEmail");
+  
+    if (token && storedLoggedIn === "true" && storedUserEmail) {
+      setLoggedIn(true);
+      setUserEmail(storedUserEmail);
+    }
+  }, []);
+  
 
   const onSignOut = () => {
-    localStorage.clear();
+    // Удаляем информацию из локального хранилища
+    localStorage.removeItem("loggedIn");
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("token");
+    
     setLoggedIn(false);
+    setUserEmail("");
     navigate("/sign-in");
   };
+  
+  
 
   function handleCardClick(card) {
     setSelectedCard(card);
@@ -179,31 +214,40 @@ export default function App() {
   }
 
   useEffect(() => {
-    api
-      .getApiUserInfo()
-      .then((userData) => {
-        setCurrentUser(userData);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-
+    if (loggedIn) {
+      // Выполняем запрос за данными пользователя
+      api.getApiUserInfo()
+        .then((userData) => {
+          setCurrentUser(userData);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [loggedIn]); // loggedIn включен в массив зависимостей
+  
   useEffect(() => {
-    api
-      .getAllCards()
-      .then((data) => {
-        setCards(data);
-      })
-      .catch((err) => {
-        console.log("Ошибка:", err);
-      });
-  }, []);
+    if (loggedIn) {
+      // Выполняем запрос за карточками
+      api.getAllCards()
+        .then((data) => {
+          setCards(data);
+        })
+        .catch((err) => {
+          console.log("Ошибка:", err);
+        });
+    }
+  }, [loggedIn]); // loggedIn включен в массив зависимостей
+  
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-        <Header />
+        <Header 
+          onSignOut={onSignOut}
+          loggedIn={loggedIn}
+          userEmail={userEmail}
+          />
         <Routes>
           <Route
             path="/"
