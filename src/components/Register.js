@@ -12,7 +12,6 @@ export default function Register({ onRegister }) {
       buttonText="Зарегистрироваться"
       onSubmit={async (email, password) => {
         await onRegister(email, password);
-        navigate("/sign-in");
       }}
     />
   );

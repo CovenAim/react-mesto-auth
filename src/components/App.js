@@ -44,7 +44,7 @@ export default function App() {
       setUserEmail(storedUserEmail);
       navigate("/"); // Перенаправление пользователя на главную страницу после успешной авторизации
     }
-  }, [navigate]);
+  }, []);
 
   const handleEditProfileClick = () => {
     setIsEditProfilePopupOpen(true);
@@ -73,12 +73,12 @@ export default function App() {
         setToken(data.token);
         setLoggedIn(true);
         setUserEmail(email);
-        
+
         // Сохраняем информацию в локальное хранилище
         localStorage.setItem("loggedIn", "true");
         localStorage.setItem("userEmail", email);
         localStorage.setItem("token", data.token);
-        
+
         navigate("/");
       }
     } catch (err) {
@@ -89,51 +89,54 @@ export default function App() {
       });
     }
   };
-  
-  
 
   const handleRegister = (email, password) => {
-    handleSubmit(() => apiAuthorize.register(email, password))
-      .then(() => {
-        openInfotooltip({
-          type: "success",
-          text: "Вы успешно зарегистрировались!",
-        });
-        navigate("/sign-in", { replace: true });
-      })
-      .catch((error) => {
-        openInfotooltip({
-          type: "error",
-          text: "Что-то пошло не так! Попробуйте ещё раз.",
-        });
-        console.error("Ошибка регистрации:", error);
-      });
+    handleSubmit(() =>
+      apiAuthorize
+        .register(email, password)
+        .then(() => {
+          openInfotooltip({
+            type: "success",
+            text: "Вы успешно зарегистрировались!",
+          });
+          navigate("/sign-in", { replace: true });
+        })
+        .catch((error) => {
+          openInfotooltip({
+            type: "error",
+            text: "Что-то пошло не так! Попробуйте ещё раз.",
+          });
+          console.error("Ошибка регистрации:", error);
+        })
+    );
   };
-  
+
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const storedLoggedIn = localStorage.getItem("loggedIn");
-    const storedUserEmail = localStorage.getItem("userEmail");
-  
-    if (token && storedLoggedIn === "true" && storedUserEmail) {
-      setLoggedIn(true);
-      setUserEmail(storedUserEmail);
+
+    if (token) {
+      apiAuthorize
+        .checkToken(token)
+        .then((response) => {
+          setLoggedIn(true);
+          setUserEmail(response?.data?.email);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }, []);
-  
 
   const onSignOut = () => {
     // Удаляем информацию из локального хранилища
     localStorage.removeItem("loggedIn");
     localStorage.removeItem("userEmail");
     localStorage.removeItem("token");
-    
+
     setLoggedIn(false);
     setUserEmail("");
     navigate("/sign-in");
   };
-  
-  
 
   function handleCardClick(card) {
     setSelectedCard(card);
@@ -216,7 +219,8 @@ export default function App() {
   useEffect(() => {
     if (loggedIn) {
       // Выполняем запрос за данными пользователя
-      api.getApiUserInfo()
+      api
+        .getApiUserInfo()
         .then((userData) => {
           setCurrentUser(userData);
         })
@@ -225,11 +229,12 @@ export default function App() {
         });
     }
   }, [loggedIn]); // loggedIn включен в массив зависимостей
-  
+
   useEffect(() => {
     if (loggedIn) {
       // Выполняем запрос за карточками
-      api.getAllCards()
+      api
+        .getAllCards()
         .then((data) => {
           setCards(data);
         })
@@ -238,16 +243,15 @@ export default function App() {
         });
     }
   }, [loggedIn]); // loggedIn включен в массив зависимостей
-  
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-        <Header 
+        <Header
           onSignOut={onSignOut}
           loggedIn={loggedIn}
           userEmail={userEmail}
-          />
+        />
         <Routes>
           <Route
             path="/"

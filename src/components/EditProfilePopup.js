@@ -54,7 +54,7 @@ export default function EditProfilePopup({
           placeholder="Введите имя"
           className="edit-form__text edit-form__text_input_name popup__input"
           minLength="2"
-          maxLength="40"
+          maxLength="30"
           required
         />
         <span className="name-error popup__input-error"></span>

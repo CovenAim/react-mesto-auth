@@ -10,10 +10,6 @@ export function sendRequest(res) {
         console.error('Данные ошибки:', errorData);
         throw new Error(errorData.message || `Ошибка: ${res.status} ${res.statusText}`);
       })
-      .catch((error) => {
-        console.error('Ошибка при обработке JSON:', error);
-        throw new Error(`Ошибка: ${res.status} ${res.statusText}`);
-      });
   }
 }
 

@@ -36,7 +36,7 @@ const AuthForm = ({ title, buttonText, onSubmit }) => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             minLength="2"
-            maxLength="40"
+            maxLength="30"
             required
           />
           <div className="auth-form__line"></div>

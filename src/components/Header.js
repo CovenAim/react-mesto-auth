@@ -4,8 +4,6 @@ import { Link, useLocation } from 'react-router-dom';
 
 function Header({ loggedIn, userEmail, onSignOut }) {
   const location = useLocation();
-  console.log("loggedIn:", loggedIn);
-  console.log("userEmail:", userEmail);
 
   return (
     <header className="header">
